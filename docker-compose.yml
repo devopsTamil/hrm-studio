@@ -1,0 +1,56 @@
+#Setting up the compose version and it depends upon the docker engine version.
+version: '3.8'
+
+#Initializing service.
+services:
+
+  #Naming the backend service of the compose-project.
+  hrms-be:
+
+    #Setting up the container name for the backend container of the compose-project.
+    container_name: hrms-be-cont
+
+    #Hostname for the backend container.
+    hostname: hrms-be
+
+    #Tagging the image on the basis of project and dockerfile.
+    image: hrms-be:latest
+
+    #Mentioning the project's dockerfile and context path.
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    #Exposing the ports required for the backend service to the internet.
+    ports:
+     - 5000:80
+
+    #Conditioning the container restart and its depend on container's health.
+    restart: unless-stopped
+    
+      
+  #Naming the frontend service of the compose-project.
+  hrms-fe:
+
+    #Setting up the container name for the frontend container of the compose-project.
+    container_name: hrms-fe-cont
+
+    #Hostname for the frontend container.
+    hostname:  hrms-fe
+
+    #Tagging the image on the basis of project and dockerfile.
+    image: hrms-fe:latest
+
+    #Mentioning the project's dockerfile and context path.
+    build:
+      context: ./frontendV2
+      dockerfile: Dockerfile
+
+    #Exposing the ports required for the frontend service to the internet.
+    ports:
+     - 4200:4200
+
+    #Conditioning the container restart and its depend on container's health.
+    restart: unless-stopped
+    depends_on:
+     - hrms-be 
